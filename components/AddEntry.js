@@ -1,10 +1,20 @@
 import React, { Component } from "react"
-import { View } from "react-native"
-import { getMetricMetaInfo } from "../utils/helpers"
+import { View, TouchableOpacity, Text } from "react-native"
+import { getMetricMetaInfo, timeToString } from "../utils/helpers"
 import UdaciSlider from './UdaciSlider'
 import UdaciSteppers from './UdaciSteppers'
 import DateHeader from './DateHeader'
 
+//component for our submit button
+function SubmitBtn ({ onPress }) {
+  return (
+    <TouchableOpacity
+      onPress={//note: 'onPress' in React native is equivalent to onClick in normal React
+        onPress}>
+        <Text>SUBMIT</Text>
+    </TouchableOpacity>
+  )
+}
 
 /*This Component is a form for our fitness app. The user can log an activity with this form */
 export default class AddEntry extends Component {
@@ -52,6 +62,20 @@ export default class AddEntry extends Component {
       [metric]: value
     }))
   }
+  submit = () => {
+    const key = timeToString() //key we will use to identify an information submitted by this form,  is the time
+    const entry = this.state //get all the matrices logged in but the user
+
+    // Update Redux
+
+    this.setState(() => ({ run: 0, bike: 0, swim: 0, sleep: 0, eat: 0 })) //reset the form to empty
+
+    // Navigate to home
+
+    // Save to "DB"
+
+    // Clear local notification so that the user dont get a notification to submit their information for this day
+  }
 
   render() {
 
@@ -60,6 +84,8 @@ export default class AddEntry extends Component {
     return (
       <View>
         <DateHeader date={(new Date()).toLocaleDateString()}/>
+        <Text>{ //for debugging
+        /*JSON.stringify(this.state)*/}</Text>
         {Object.keys(metaInfo).map((key) => { 
           const { getIcon, type, ...rest } = metaInfo[key] //get each object based on th key
           const value = this.state[key]
@@ -82,6 +108,7 @@ export default class AddEntry extends Component {
             </View>
           )
         })}
+        <SubmitBtn onPress={this.submit} />
       </View>
     )
   }
