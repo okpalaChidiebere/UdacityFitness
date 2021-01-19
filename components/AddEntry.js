@@ -3,6 +3,7 @@ import { View } from "react-native"
 import { getMetricMetaInfo } from "../utils/helpers"
 import UdaciSlider from './UdaciSlider'
 import UdaciSteppers from './UdaciSteppers'
+import DateHeader from './DateHeader'
 
 
 /*This Component is a form for our fitness app. The user can log an activity with this form */
@@ -58,6 +59,7 @@ export default class AddEntry extends Component {
 
     return (
       <View>
+        <DateHeader date={(new Date()).toLocaleDateString()}/>
         {Object.keys(metaInfo).map((key) => { 
           const { getIcon, type, ...rest } = metaInfo[key] //get each object based on th key
           const value = this.state[key]
