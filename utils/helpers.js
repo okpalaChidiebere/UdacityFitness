@@ -1,3 +1,13 @@
+import React from "react";
+import { View } from "react-native";
+import {
+  FontAwesome,
+  MaterialIcons,
+  MaterialCommunityIcons
+} from "@expo/vector-icons";
+import { white } from "./colors";
+
+
 export function isBetween (num, x, y) {
     if (num >= x && num <= y) {
       return true
@@ -44,4 +54,90 @@ export function isBetween (num, x, y) {
     const date = new Date(time)
     const todayUTC = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
     return todayUTC.toISOString().split('T')[0]
+  }
+
+
+  export function getMetricMetaInfo(metric) {
+
+    //This object has the five properties which co-relates to the specific metrics that we are tracking
+    const info = {
+        /*The objects in here contains any information that will help us build the UI for our specific form*/
+
+        run: { //information we need to know about run
+            displayName: "Run",
+            max: 50, //max miles you can run in a day
+            unit: "miles",
+            step: 1,
+            type: "steppers",
+            getIcon() { //when this method is invoked we will get the icon for this specific metric 'run'
+              return (
+                <View>
+                  <MaterialIcons name="directions-run" color={"black"} size={35} />
+                </View>
+              );
+            }
+        },
+        bike: {
+            displayName: "Bike",
+            max: 100,
+            unit: "miles",
+            step: 1,
+            type: "steppers",
+            getIcon() {
+              return (
+                <View>
+                  <MaterialCommunityIcons name="bike" color={white} size={32} />
+                </View>
+              );
+            }
+          },
+          swim: {
+            displayName: "Swim",
+            max: 9900,
+            unit: "meters",
+            step: 100,
+            type: "steppers",
+            getIcon() {
+              return (
+                <View>
+                  <MaterialCommunityIcons name="swim" color={white} size={35} />
+                </View>
+              );
+            }
+          },
+          sleep: {
+            displayName: "Sleep",
+            max: 24,
+            unit: "hours",
+            step: 1,
+            type: "slider",
+            getIcon() {
+              return (
+                <View>
+                  <FontAwesome name="bed" color={white} size={30} />
+                </View>
+              );
+            }
+          },
+          eat: {
+            displayName: "Eat",
+            max: 10,
+            unit: "rating",
+            step: 1,
+            type: "slider",
+            getIcon() {
+              return (
+                <View>
+                  <MaterialCommunityIcons name="food" color={white} size={35} />
+                </View>
+              );
+            }
+          }
+        };
+      
+        //if you dont pass in an argument when you invoke this function, we will return the whole object
+        //but, if you pass in an argument(key to a desired metric), specifically the metric, then we just return just that metric 
+        return typeof metric === "undefined" 
+        ? info 
+        : info[metric];
   }
