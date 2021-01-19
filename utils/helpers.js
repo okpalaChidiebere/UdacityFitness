@@ -68,7 +68,7 @@ export function isBetween (num, x, y) {
             max: 50, //max miles you can run in a day
             unit: "miles",
             step: 1,
-            type: "steppers",
+            type: "steppers", //input type can be a steppers(A button to increament or decreament) or slider(for slider we have to specify the number ranger we want the slider to have)
             getIcon() { //when this method is invoked we will get the icon for this specific metric 'run'
               return (
                 <View>
