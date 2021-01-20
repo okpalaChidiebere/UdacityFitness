@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    paddingTop: 50,
     backgroundColor: white
   },
   row: { //styling each row for a meta data entry information for this form
