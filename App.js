@@ -12,7 +12,7 @@ export default class App extends React.Component{
   render(){
     return (
       <Provider store={this.store}>
-        <View>
+        <View style={styles.container}>
           <AddEntry />
         </View>
       </Provider>
@@ -22,9 +22,8 @@ export default class App extends React.Component{
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1, //we want this component to take up all the available space. This way, any of its childeren components will be able to expand the fullsize of the phone
     backgroundColor: '#fff',
     alignItems: 'stretch', //to make the slider have full width of screen
-    justifyContent: 'center',
   },
 });
