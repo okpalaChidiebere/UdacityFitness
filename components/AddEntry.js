@@ -1,12 +1,15 @@
 import React, { Component } from "react"
 import { View, TouchableOpacity, Text } from "react-native"
-import { getMetricMetaInfo, timeToString } from "../utils/helpers"
+import { getMetricMetaInfo, timeToString, getDailyReminderValue } from "../utils/helpers"
 import UdaciSlider from './UdaciSlider'
 import UdaciSteppers from './UdaciSteppers'
 import DateHeader from './DateHeader'
 import { Ionicons } from "@expo/vector-icons";
 import TextButton from './TextButton'
 import { submitEntry, removeEntry } from '../utils/api'
+import { connect } from 'react-redux'
+import { addEntry } from '../actions'
+
 
 
 //component for our submit button
@@ -21,7 +24,7 @@ function SubmitBtn ({ onPress }) {
 }
 
 /*This Component is a form for our fitness app. The user can log an activity with this form */
-export default class AddEntry extends Component {
+class AddEntry extends Component {
 
   state = {
     //stepper input metrics
@@ -72,6 +75,10 @@ export default class AddEntry extends Component {
 
     // Update Redux
 
+    this.props.dispatch(addEntry({
+      [key]: entry //remeber we identify each entry by their date it was entered in our Reduc store
+    }))
+
     this.setState(() => ({ run: 0, bike: 0, swim: 0, sleep: 0, eat: 0 })) //reset the form to empty
 
     // Navigate to home
@@ -86,6 +93,10 @@ export default class AddEntry extends Component {
     const key = timeToString();
 
     // Update Redux
+    //whenever reset runs you want to update the value data for that specific day to be the default value for the specific day
+    this.props.dispatch(addEntry({ 
+      [key]: getDailyReminderValue()
+    }))
 
     // Route to Home
 
@@ -98,7 +109,7 @@ export default class AddEntry extends Component {
 
     const metaInfo = getMetricMetaInfo() //gets the whole object
 
-    if (true) { //eventually we will pass this.props.alreadyLogged
+    if (this.props.alreadyLogged) { //eventually we will pass this.props.alreadyLogged
       return (
         <View>
           <Ionicons name={"md-happy-outline"} size={100} />
@@ -141,3 +152,21 @@ export default class AddEntry extends Component {
     )
   }
 }
+
+function mapStateToProps (state) {
+  const key = timeToString()
+
+  return {
+    //if state[key] is null or statkey[key] has a today propery it means the user has not logged any information for that day so alreadyLogged will be false 
+    /*Remeber we have three section in 
+    - we could have an object with all of its properties where state[key] has an enty
+    - A section where state[key] is null we print 'You didnt log any data for this day'
+    - Lastly Where state[key] has a today property which is default when no entry has been logged for that day */
+    //rememeber key is the day for that day! 
+    alreadyLogged: state[key] && typeof state[key].today === 'undefined'
+  }
+}
+
+export default connect(
+  mapStateToProps
+)(AddEntry)

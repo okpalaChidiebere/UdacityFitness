@@ -141,3 +141,12 @@ export function isBetween (num, x, y) {
         ? info 
         : info[metric];
   }
+
+  /*This method is called when we want to reset an entry for a specific day  */
+  export function getDailyReminderValue () {
+    return {
+      today: "👋 Don't forget to log your data today!" //It's just "CMD + CTRL + Space" on Mac tp pick emojis
+
+
+    }
+  }

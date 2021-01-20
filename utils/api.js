@@ -7,7 +7,7 @@ AsyncStorage is a simple, unencrypted, asynchronous, persistent(even
     So our app uses a local dabase instead of an external database
 */
 
-import { AsyncStorage } from '@react-native-async-storage/async-storage'
+import AsyncStorage  from '@react-native-async-storage/async-storage'
 import { CALENDAR_STORAGE_KEY } from './_calendar' //This key indicates the location where we will persist our data inside our AsuncStorage
 
 export function submitEntry ({ entry, key }) {
