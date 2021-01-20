@@ -6,6 +6,7 @@ import UdaciSteppers from './UdaciSteppers'
 import DateHeader from './DateHeader'
 import { Ionicons } from "@expo/vector-icons";
 import TextButton from './TextButton'
+import { submitEntry, removeEntry } from '../utils/api'
 
 
 //component for our submit button
@@ -75,7 +76,9 @@ export default class AddEntry extends Component {
 
     // Navigate to home
 
-    // Save to "DB"
+    // Save to "DB". NOTE: we used AsyncStorage which allows data persistene even when the phone or app closes. 
+    //It shares similar concepts with Preferences and SharedPreferences for Android phones and LoaclStorage for webBrowsers
+    submitEntry({ key, entry })
 
     // Clear local notification so that the user dont get a notification to submit their information for this day
   }
@@ -86,7 +89,9 @@ export default class AddEntry extends Component {
 
     // Route to Home
 
-    // Update "DB"
+    // Update "DB". NOTE: we used AsyncStorage which allows data persistene even when the phone or app closes. 
+    //It shares similar concepts with Preferences and SharedPreferences for Android phones and LoaclStorage for webBrowsers
+    removeEntry(key)
   }
 
   render() {
