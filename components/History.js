@@ -7,6 +7,7 @@ import { fetchCalendarResults } from '../utils/api'
 import { Agenda as UdacityFitnessCalendar } from 'react-native-calendars'
 import { white } from '../utils/colors'
 import DateHeader from './DateHeader'
+import MetricCard from './MetricCard'
 
 class History extends Component {
 
@@ -29,8 +30,9 @@ class History extends Component {
       .then(() => this.setState(() => ({ready: true})))
   }
 
-  renderItem = ({ today, ...metrics }, formattedDate, key) => {
+  renderItem = ({ today, ...metrics }, firstItemInDay, date) => {
       //console.log(today)
+      const formattedDate = date.toString("yyyy-MM-dd")
     return(
     <View style={styles.item}>
       {today
@@ -43,7 +45,7 @@ class History extends Component {
         : <TouchableOpacity
             onPress={() => console.log('Pressed!')}
           >
-              <Text>{JSON.stringify(metrics)}</Text>
+              <MetricCard date={formattedDate} metrics={metrics} />
           </TouchableOpacity>}
     </View>
     )}
