@@ -14,11 +14,14 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import EntryDetail, { EntryDetailNavigationOptions } from './components/EntryDetail'
 import { ADD_ENTRY_TAB, HISTORY_TAB, 
   ENTRY_DETAILS_STACK, HOME_STACK } from './utils/constants'
+import Constants from "expo-constants";
 
 
 function UdaciStatusBar ({backgroundColor, ...props}) {
   return (
-    <StatusBar translucent backgroundColor={backgroundColor} {...props} />
+    <View style={{backgroundColor, height: Constants.statusBarHeight}}>
+      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
+    </View>
   )
 }
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Text, View, StyleSheet } from 'react-native'
+import {Dimensions, Text, View, StyleSheet } from 'react-native'
 import { purple, white } from '../utils/colors'
 import { connect } from 'react-redux'
 import MetricCard from './MetricCard'
@@ -79,6 +79,7 @@ export function EntryDetailNavigationOptions({ route }) { //we haveaccess to the
         headerStyle: {
             backgroundColor: purple,
         },
+        headerTitleStyle: {width: Dimensions.get("window").width},
         //End Etyling header for this Component
         title: `${month}/${day}/${year}`, //this ttitle appear at the center of the header with backbutton to the left end of the header
     }
