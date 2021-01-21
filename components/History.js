@@ -9,6 +9,7 @@ import { white } from '../utils/colors'
 import DateHeader from './DateHeader'
 import MetricCard from './MetricCard'
 import AppLoading from 'expo-app-loading'
+import ENTRY_DETAILS_STACK from '../utils/constants'
 
 class History extends Component {
 
@@ -44,7 +45,10 @@ class History extends Component {
             </Text>
           </View>
         : <TouchableOpacity
-            onPress={() => console.log('Pressed!')}
+            onPress={() => this.props.navigation.navigate( //we have access to the navigation props because React navigation(Tab Navigation - TabNav) is controlling our Router and it is rendering the History Component
+                ENTRY_DETAILS_STACK,
+                { entryId: key } //pass any parameter we want to our router. eg for enrtyID we will be poassing props.route.params.entryId
+            )}
           >
               <MetricCard date={formattedDate} metrics={metrics} />
           </TouchableOpacity>}

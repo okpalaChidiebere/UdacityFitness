@@ -8,9 +8,12 @@ import History from './components/History'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-
+import { createStackNavigator } from '@react-navigation/stack'
 import { purple, white } from './utils/colors'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
+import EntryDetail, { EntryDetailNavigationOptions } from './components/EntryDetail'
+import { ADD_ENTRY_TAB, HISTORY_TAB, 
+  ENTRY_DETAILS_STACK, HOME_STACK } from './utils/constants'
 
 
 function UdaciStatusBar ({backgroundColor, ...props}) {
@@ -24,8 +27,6 @@ const Tabs =
     ? createBottomTabNavigator() //we show the tab at the bottom for android
     : createMaterialTopTabNavigator() //we show normal tab for androdi at the top of the screen
 
-const HISTORY_TAB = 'History'
-const ADD_ENTRY_TAB = 'Add Entry'
 
 const TabNav = () => (
   <Tabs.Navigator
@@ -66,6 +67,25 @@ const TabNav = () => (
   </Tabs.Navigator>
 )
 
+const Stack = createStackNavigator()
+const MainNavigator = () => (
+    <Stack.Navigator headerMode="screen">
+        <Stack.Screen
+          name={HOME_STACK}
+          component={//we render the TabNav which renders the History and AddEntry Components which is our HomePage
+            TabNav}
+          options={ //No header styling for ths HomePage. We already have Tabs as Header in the HomePage
+            {headerShown: false}}
+        />
+        <Stack.Screen
+          name={ENTRY_DETAILS_STACK}
+          component={EntryDetail}
+          options={EntryDetailNavigationOptions}
+        />
+    </Stack.Navigator>
+)
+
+
 export default class App extends React.Component{
 
   store = createStore(reducer)
@@ -77,7 +97,7 @@ export default class App extends React.Component{
           <NavigationContainer>
           <UdaciStatusBar backgroundColor={purple} barStyle={// makes all of the items in the StatusBar white
             "light-content"} />
-            <TabNav />
+            <MainNavigator />
           </NavigationContainer>
         </View>
       </Provider>
