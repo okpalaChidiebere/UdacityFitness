@@ -10,6 +10,8 @@ import { submitEntry, removeEntry } from '../utils/api'
 import { connect } from 'react-redux'
 import { addEntry } from '../actions'
 import { purple, white } from "../utils/colors";
+import ADD_ENTRY_TAB from '../utils/constants'
+import { CommonActions } from '@react-navigation/native'
 
 
 
@@ -86,6 +88,7 @@ class AddEntry extends Component {
     this.setState(() => ({ run: 0, bike: 0, swim: 0, sleep: 0, eat: 0 })) //reset the form to empty
 
     // Navigate to home
+    this.toHome()
 
     // Save to "DB". NOTE: we used AsyncStorage which allows data persistene even when the phone or app closes. 
     //It shares similar concepts with Preferences and SharedPreferences for Android phones and LoaclStorage for webBrowsers
@@ -103,10 +106,18 @@ class AddEntry extends Component {
     }))
 
     // Route to Home
+    this.toHome()
 
     // Update "DB". NOTE: we used AsyncStorage which allows data persistene even when the phone or app closes. 
     //It shares similar concepts with Preferences and SharedPreferences for Android phones and LoaclStorage for webBrowsers
     removeEntry(key)
+  }
+
+  toHome = () => {
+    this.props.navigation.dispatch({
+      ...CommonActions.goBack(),
+      source: ADD_ENTRY_TAB //we want to go back from the route that has the key 'AddEntry'
+    })
   }
 
   render() {
