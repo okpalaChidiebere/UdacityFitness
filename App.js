@@ -14,6 +14,8 @@ export default class App extends React.Component{
     return (
       <Provider store={this.store}>
         <View style={styles.container}>
+          <View style={ //this will get the statusbar out in the way for now
+            {height: 30}}/>
           <History />
         </View>
       </Provider>

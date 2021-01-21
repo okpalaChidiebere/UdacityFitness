@@ -4,8 +4,14 @@ import { connect } from 'react-redux'
 import { receiveEntries, addEntry } from '../actions'
 import { timeToString, getDailyReminderValue } from '../utils/helpers'
 import { fetchCalendarResults } from '../utils/api'
+import { Agenda as UdacityFitnessCalendar } from 'react-native-calendars'
 
 class History extends Component {
+
+    state = {
+        ready: false,
+    };
+
   componentDidMount () {
     const { dispatch } = this.props
 
@@ -20,11 +26,34 @@ class History extends Component {
       })
       .then(() => this.setState(() => ({ready: true})))
   }
-  render() {
+
+  renderItem = ({ today, ...metrics }, formattedDate, key) => {
+      console.log(today)
+    return(
+    <View>
+      {today
+        ? <Text>{JSON.stringify(today)}</Text>
+        : <Text>{JSON.stringify(metrics)}</Text>}
+    </View>
+  )}
+  renderEmptyDate(formattedDate) { //we use the arrow function, because we are not using the 'this' keyword inside of it
     return (
       <View>
-        <Text>{JSON.stringify(this.props)}</Text>
+        <Text>No Data for this day</Text>
       </View>
+    )
+  }
+
+  render() {
+    const { entries } = this.props
+    return (
+        <UdacityFitnessCalendar
+        items={entries}
+        renderItem={ //this will return  a JSX that will be rendered whenever the calendar is going to render a specific day
+            this.renderItem}
+        renderEmptyDate={// if that day is empty, the JSX returned by this function will be passed to this prop 'renderEmptyDate' 
+            this.renderEmptyDate}
+        />
     )
   }
 }
