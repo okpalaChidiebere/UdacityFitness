@@ -77,7 +77,7 @@ class AddEntry extends Component {
   }
   submit = () => {
     const key = timeToString() //key we will use to identify an information submitted by this form,  is the time
-    const entry = this.state //get all the matrices logged in but the user
+    const entry = [this.state] //get all the matrices logged in but the user
 
     // Update Redux
 
@@ -102,7 +102,7 @@ class AddEntry extends Component {
     // Update Redux
     //whenever reset runs you want to update the value data for that specific day to be the default value for the specific day
     this.props.dispatch(addEntry({ 
-      [key]: getDailyReminderValue()
+      [key]: [getDailyReminderValue()]
     }))
 
     // Route to Home
@@ -224,7 +224,7 @@ function mapStateToProps (state) {
     - A section where state[key] is null we print 'You didnt log any data for this day'
     - Lastly Where state[key] has a today property which is default when no entry has been logged for that day */
     //rememeber key is the day for that day! 
-    alreadyLogged: state[key] && typeof state[key].today === 'undefined'
+    alreadyLogged: state[key][0] && typeof state[key][0].today === 'undefined'
   }
 }
 

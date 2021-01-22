@@ -9,12 +9,13 @@ import { white } from '../utils/colors'
 import DateHeader from './DateHeader'
 import MetricCard from './MetricCard'
 import AppLoading from 'expo-app-loading'
-import ENTRY_DETAILS_STACK from '../utils/constants'
+import { ENTRY_DETAILS_STACK } from '../utils/constants'
 
 class History extends Component {
 
     state = {
         ready: false,
+        selectedDate: timeToString(), //keep track of selected date on calendar either as the user crolls or when the user clicks on a specific date
     }
 
   componentDidMount () {
@@ -25,35 +26,40 @@ class History extends Component {
       .then(({ entries }) => {
         if (!entries[timeToString()]) { //if we dont have any entries for today
           dispatch(addEntry({ //we set the default daily reminder text as the data for that day in the Store, So this will show up in the UI
-            [timeToString()]: getDailyReminderValue() 
+            [timeToString()]: [getDailyReminderValue()]
           }))
         }
       })
       .then(() => this.setState(() => ({ready: true})))
   }
 
-  renderItem = ({ today, ...metrics }, firstItemInDay, date) => {
-      //console.log(today)
-      const formattedDate = date.toString("yyyy-MM-dd")
-    return(
+  renderItem = ({ today, ...metrics }, firstItemInDay) => (
     <View style={styles.item}>
       {today
         ? <View>
-            <DateHeader date={formattedDate}/>
+            { /*<DateHeader date={dateKey} />*/ }
             <Text style={styles.noDataText}>
-              {today}
+                {today}
             </Text>
-          </View>
-        : <TouchableOpacity
-            onPress={() => this.props.navigation.navigate( //we have access to the navigation props because React navigation(Tab Navigation - TabNav) is controlling our Router and it is rendering the History Component
-                ENTRY_DETAILS_STACK,
-                { entryId: key } //pass any parameter we want to our router. eg for enrtyID we will be poassing props.route.params.entryId
-            )}
-          >
-              <MetricCard date={formattedDate} metrics={metrics} />
-          </TouchableOpacity>}
+        </View>
+        : <TouchableOpacity onPress={()=> this.props.navigation.navigate(ENTRY_DETAILS_STACK,
+        { entryId: this.state.selectedDate })}>
+                <MetricCard metrics={metrics} />
+            </TouchableOpacity>}
     </View>
-    )}
+  )
+
+  onDayPress = (day) => {
+    this.setState(curr => ({
+      selectedDate: day.dateString
+    }))
+  }
+
+  onDayChange = (day) => {
+    this.setState({
+        selectedDate: day.dateString
+    })
+  }
 
   renderEmptyDate(date) { //we use the arrow function, because we are not using the 'this' keyword inside of it
     const formattedDate = date.toString("MMMM d, yyyy") //convert "2021-01-20T00:00:00.000Z" to Janyary 20, 2021
@@ -78,22 +84,12 @@ class History extends Component {
     return (
         <UdacityFitnessCalendar
         items={entries}
-        renderItem={ //this will return  a JSX that will be rendered whenever the calendar is going to render a specific day
-            this.renderItem}
-        renderEmptyDate={// if that day is empty, the JSX returned by this function will be passed to this prop 'renderEmptyDate' 
-            this.renderEmptyDate}
+        onDayPress={this.onDayPress}
+        onDayChange={this.onDayChange}
+        renderItem={(item, firstItemInDay) => this.renderItem(item, firstItemInDay)}
+        renderEmptyDate={this.renderEmptyDate}
         />
     )
-    /*
-    When i add this it shows good data but my calendar does not work properly
-    My calendar only renders 'renderEmptyDate' even when there is data
-    <View>
-            <ScrollView>
-            <Text>{JSON.stringify(this.props)}</Text>
-            </ScrollView>
-            
-        </View>
-    */
   }
 }
 
