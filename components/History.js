@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Platform, TouchableOpacity, ScrollView } from 'react-native'
 import { connect } from 'react-redux'
 import { receiveEntries, addEntry } from '../actions'
 import { timeToString, getDailyReminderValue } from '../utils/helpers'
@@ -84,6 +84,16 @@ class History extends Component {
             this.renderEmptyDate}
         />
     )
+    /*
+    When i add this it shows good data but my calendar does not work properly
+    My calendar only renders 'renderEmptyDate' even when there is data
+    <View>
+            <ScrollView>
+            <Text>{JSON.stringify(this.props)}</Text>
+            </ScrollView>
+            
+        </View>
+    */
   }
 }
 
