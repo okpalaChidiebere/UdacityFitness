@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, ActivityIndicator, TouchableOpacity, StyleSheet } from 'react-native'
+import React, { useState, useEffect, useRef } from 'react'
+import { View, Text, ActivityIndicator, TouchableOpacity, StyleSheet, Animated } from 'react-native'
 import { Foundation } from '@expo/vector-icons'
 import { purple, white } from '../utils/colors'
 import * as Location from 'expo-location'
@@ -22,8 +22,9 @@ const Live = (props) =>  {
             speed: 0,
         },
         status: 'null',
-        direction: ''
+        direction: '',
     })
+    const bounceValue = useRef(new Animated.Value(1)).current;
 
     const askPermission = async () => {
         try{
@@ -46,6 +47,14 @@ const Live = (props) =>  {
            }, ({coords}) => {
                const newDirection = calculateDirection(coords.heading) //returns eh North, NorthEast, etc
                 const { direction } = state //help us update the direction in realtime
+
+                if (newDirection !== direction) { //compare the new direction against the old direction
+                    Animated.sequence([
+                      Animated.timing(bounceValue, { useNativeDriver: true, duration: 200, toValue: 1.04}), //our first animation of the bounce value will be timed
+                      Animated.spring(bounceValue, { useNativeDriver: true, toValue: 1, friction: 4 }) //we will take our bounceValue down to 1
+                    ]).start() //always call .start on your animations
+                }
+             
                 setState((curr) => ({
                     coords,
                     status: 'granted',
@@ -115,9 +124,11 @@ const Live = (props) =>  {
       <View style={styles.container}>
         <View style={styles.directionContainer}>
             <Text style={styles.header}>You're heading</Text>
-            <Text style={styles.direction}>
+            <Animated.Text 
+            style={ //tie the bounceValue to our UI
+                [styles.direction, {transform: [{scale: bounceValue}]}]}>
                 {direction}
-            </Text>
+            </Animated.Text>
         </View>
         <View style={styles.metricContainer}>
           <View style={styles.metric}>
