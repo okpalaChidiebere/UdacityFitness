@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, ActivityIndicator, TouchableOpacity, StyleSheet } from 'react-native'
 import { Foundation } from '@expo/vector-icons'
 import { purple, white } from '../utils/colors'
+import * as Location from 'expo-location'
+import * as Permissions from 'expo-permissions'
+import { calculateDirection } from '../utils/helpers'
 
 const Live = (props) =>  {
   /*state = {
@@ -13,13 +16,46 @@ const Live = (props) =>  {
  //Using React Hooks! It helps makes functional components stateful
     const [ state, setState ] = useState({
         coords: null,
-        status: 'granted',
+        status: 'null',
         direction: ''
     })
 
     const askPermission = () => {
 
     }
+
+    const setLocation = async () => {
+        let { coords } = await Location.watchPositionAsync({
+            accuracy: Location.Accuracy.BestForNavigation,
+            timeInterval: 100, //we want to location to update as quickly as possible
+            distanceInterval: 1
+           })
+        const newDirection = calculateDirection(coords.heading) //returns eh North, NorthEast, etc
+        setState((curr) => ({
+            coords,
+            status: 'granted',
+            direction: newDirection
+        }))
+    }
+
+    //useEffect is similar to componentDidMount for class Components
+    useEffect(() => {
+        (async () => {
+            try{
+                let { status } = await Permissions.getAsync(Permissions.LOCATION) //ask the user for permission
+                if (status === 'granted') {
+                    return setLocation()
+                }
+                setState({
+                    status
+                })
+            }catch(e){
+                console.warn("Error getting location permission")
+                setState({status: 'undetermined'})
+            }
+        })()
+    }, [])
+    
 
   
     const { status, coords, direction } = state
