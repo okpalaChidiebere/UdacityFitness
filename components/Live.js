@@ -13,7 +13,7 @@ const Live = (props) =>  {
  //Using React Hooks! It helps makes functional components stateful
     const [ state, setState ] = useState({
         coords: null,
-        status: 'undetermined',
+        status: 'denied',
         direction: ''
     })
 
@@ -34,8 +34,11 @@ const Live = (props) =>  {
     
     if (status === 'denied') {  //Here we ask for permission and the user did not giev our app permission
       return (
-        <View>
-          <Text>Denied</Text>
+        <View style={styles.center}>
+          <Foundation name='alert' size={50} />
+          <Text>
+            You denied your location. You can fix this by visiting your settings and enabling location services for this app.
+          </Text>
         </View>
       )
     }
