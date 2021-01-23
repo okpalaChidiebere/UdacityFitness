@@ -12,9 +12,10 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { purple, white } from './utils/colors'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import EntryDetail, { EntryDetailNavigationOptions } from './components/EntryDetail'
-import { ADD_ENTRY_TAB, HISTORY_TAB, 
+import { ADD_ENTRY_TAB, HISTORY_TAB, LIVE_TAB,
   ENTRY_DETAILS_STACK, HOME_STACK } from './utils/constants'
 import Constants from "expo-constants";
+import Live from './components/Live'
 
 
 function UdaciStatusBar ({backgroundColor, ...props}) {
@@ -43,6 +44,9 @@ const TabNav = () => (
                   break 
                 case ADD_ENTRY_TAB :
                   icon = ( <FontAwesome name="plus-square" size={size} color={color}/> )
+                  break
+                case LIVE_TAB :
+                  icon = ( <Ionicons name="ios-speedometer" size={size} color={color}/> )
                   break                 
               }
               return icon;
@@ -67,6 +71,7 @@ const TabNav = () => (
   >
     <Tabs.Screen name={HISTORY_TAB} component={History}/>
     <Tabs.Screen name={ADD_ENTRY_TAB} component={AddEntry} />
+    <Tabs.Screen name={LIVE_TAB} component={Live} />
   </Tabs.Navigator>
 )
 

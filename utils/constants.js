@@ -11,6 +11,7 @@
 /*Application Tabs */
 export const HISTORY_TAB = 'History' //Route to History Component
 export const ADD_ENTRY_TAB = 'AddEntry' //Route to AddEntry Component
+export const LIVE_TAB = 'live' //Route to the LIve Component
 
 /* Application Stacks */
 export const HOME_STACK = 'Home' //Route to App Component page. You can only Route to the History and AddEntry Compnent through the Tab in this App Component
