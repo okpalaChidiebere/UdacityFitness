@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, ActivityIndicator } from 'react-native'
+import { View, Text, ActivityIndicator, TouchableOpacity, StyleSheet } from 'react-native'
+import { Foundation } from '@expo/vector-icons'
+import { purple, white } from '../utils/colors'
 
 const Live = (props) =>  {
   /*state = {
@@ -11,9 +13,13 @@ const Live = (props) =>  {
  //Using React Hooks! It helps makes functional components stateful
     const [ state, setState ] = useState({
         coords: null,
-        status: null,
+        status: 'undetermined',
         direction: ''
     })
+
+    const askPermission = () => {
+
+    }
 
   
     const { status, coords, direction } = state
@@ -36,14 +42,22 @@ const Live = (props) =>  {
 
     if (status === 'undetermined') {
       return (
-        <View>
-          <Text>undetermined</Text>
+        <View style={styles.center}>
+          <Foundation name='alert' size={50} />
+          <Text>
+            You need to enable location services for this app.
+          </Text>
+          <TouchableOpacity style={styles.button} onPress={askPermission}>
+            <Text style={styles.buttonText}>
+              Enable
+            </Text>
+          </TouchableOpacity>
         </View>
       )
     }
 
     return ( //At this point permission is granted
-      <View>
+      <View style={styles.container}>
         <Text>Live</Text>
         <Text>{JSON.stringify(state)}</Text>
       </View>
@@ -52,3 +66,28 @@ const Live = (props) =>  {
 } 
 
 export default Live
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'space-between'
+    },
+    center: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginLeft: 30,
+      marginRight: 30,
+    },
+    button: {
+      padding: 10,
+      backgroundColor: purple,
+      alignSelf: 'center',
+      borderRadius: 5,
+      margin: 20,
+    },
+    buttonText :{
+      color: white,
+      fontSize: 20,
+    }
+}) 
