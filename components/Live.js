@@ -15,27 +15,43 @@ const Live = (props) =>  {
   */
  //Using React Hooks! It helps makes functional components stateful
     const [ state, setState ] = useState({
-        coords: null,
+        coords: {
+            //we will only need this two fields from the coords object return by the callback funtion
+            // more https://docs.expo.io/versions/latest/sdk/location/#locationobject
+            altitude: 0,
+            speed: 0,
+        },
         status: 'null',
         direction: ''
     })
 
-    const askPermission = () => {
-
+    const askPermission = async () => {
+        try{
+            let { status } = Permissions.askAsync(Permissions.LOCATION)
+            if(status === 'granted') {
+                return setLocation()
+            }
+            setState({status})
+        }catch(e){
+            console.warn("Error asking location permission", e);
+            setState({status: 'undetermined'})
+        }
     }
 
     const setLocation = async () => {
-        let { coords } = await Location.watchPositionAsync({
+        await Location.watchPositionAsync({
             accuracy: Location.Accuracy.BestForNavigation,
             timeInterval: 100, //we want to location to update as quickly as possible
             distanceInterval: 1
+           }, ({coords}) => {
+               const newDirection = calculateDirection(coords.heading) //returns eh North, NorthEast, etc
+                const { direction } = state //help us update the direction in realtime
+                setState((curr) => ({
+                    coords,
+                    status: 'granted',
+                    direction: newDirection
+                }))
            })
-        const newDirection = calculateDirection(coords.heading) //returns eh North, NorthEast, etc
-        setState((curr) => ({
-            coords,
-            status: 'granted',
-            direction: newDirection
-        }))
     }
 
     //useEffect is similar to componentDidMount for class Components
@@ -100,13 +116,13 @@ const Live = (props) =>  {
         <View style={styles.directionContainer}>
             <Text style={styles.header}>You're heading</Text>
             <Text style={styles.direction}>
-                North
+                {direction}
             </Text>
         </View>
         <View style={styles.metricContainer}>
           <View style={styles.metric}>
             <Text style={[styles.header, {color: white}]}>
-              Altitude
+              {Math.round(coords.altitude * 3.2808)} feet
             </Text>
             <Text style={[styles.subHeader, {color: white}]}>
               {200} feet
@@ -114,7 +130,7 @@ const Live = (props) =>  {
           </View>
           <View style={styles.metric}>
             <Text style={[styles.header, {color: white}]}>
-              Speed
+            {(coords.speed * 3.2369) } Speed
             </Text>
             <Text style={[styles.subHeader, {color: white}]}>
               {300} MPH
