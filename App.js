@@ -16,6 +16,8 @@ import { ADD_ENTRY_TAB, HISTORY_TAB, LIVE_TAB,
   ENTRY_DETAILS_STACK, HOME_STACK } from './utils/constants'
 import Constants from "expo-constants";
 import Live from './components/Live'
+//import * as Notifications from 'expo-notifications'
+//import { setLocalNotification } from './utils/notifications'
 
 
 function UdaciStatusBar ({backgroundColor, ...props}) {
